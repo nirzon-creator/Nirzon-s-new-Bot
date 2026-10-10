@@ -12,8 +12,8 @@
   "antiInbox": false,
   "language": "en",
   "notesLanguage": "change language using ISO 639-1 code",
-  "nickNameBot": "𝙃𝙞𝙣𝙖𝙏'𝙖 𝙐𝙯𝙪𝙢𝙖𝙆'𝙞𝙞 ᯓᡣ𐭩",
-  "prefix": "/",
+  "nickNameBot": "𝐌𝐢𝐬𝐬-𝐎𝐦𝐢ᯓᡣ𐭩",
+  "prefix": "-",
   "enableTypingIndicator": true,
   "typingDuration": 2000,
   "notesTypingIndicator": "true = show 'is typing...' before every reply (more human-like, adds visible delay) | false = reply instantly, no typing shown",
@@ -30,7 +30,7 @@
     "ignoreCommand": []
   },
   "adminBot": [
-    "61592832917083",
+    "61561645647195",
     " ",
     " "
   ],
@@ -39,7 +39,9 @@
     "onlyAdmin": true,
     "emojis": [
       "😡",
-      "🤬"
+      "🤬",
+      "😠",
+      "😤"
     ],
     "notes": "If enable = true, bot will unsend any message reacted with these emojis. If onlyAdmin = true, only adminBot IDs can trigger it."
   },
