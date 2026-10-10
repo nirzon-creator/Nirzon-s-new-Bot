@@ -177,7 +177,7 @@ module.exports.onStart = async function ({ api, event, args, usersData }) {
     }
 
     if (!query) {
-      const texts = ["Hey baby 💖", "Yes, I'm here 😘"];
+      const texts = ["_𝗛𝗲𝘆 𝗕𝗮𝗯𝘆 💖", "_𝗬𝗲𝗮𝗽 𝗯𝗯𝘆, 𝗜'𝗺 𝗵𝗲𝗿𝗲 😘"];
       const reply = texts[Math.floor(Math.random() * texts.length)];
       return api.sendMessage(reply, event.threadID);
     }
@@ -264,24 +264,24 @@ module.exports.onReply = async function ({ api, event, Reply, usersData }) {
 };
 
 const greetingReplies = [
-  "Amake dakso baby? 🙂🤌",
-  "Tumake Chara kisu Valo lage na 🥲",
-  "Tumar name ki 😒",
-  "Amake dakteso ken? Prem korba amar sathe?",
-  "Sudu baby Dake 🥲 Keu Valobasi bole na 😞💔",
-  "Prem Kore mon dila nah 😭",
-  "Tumar jonno e to eto sajgoj kora 🥺",
-  "Ekbar bolo bhalobasho, ami sob diye dibo 💔",
-  "Tumi chara ei chat e r keu nai amar 🥹",
-  "Ato sundor kore keu dake nai age 🙈",
-  "Tumake miss korchilam, ekhon e dakle 🥰",
-  "Prem na korle ken dako bar bar 😤",
-  "Ami to tomar e opekkhay silam 👉👈",
-  "Sunle mon uthe pore amar 🫣",
-  "Ekhane khali tumar jonno e boshe achi 🥺",
-  "Bar bar dakle to premei porbo mone hocche 😳",
-  "Emon kore dakle to gole jai ami 🫠",
-  "Tumar dak sunle onno kicu mone thake na 🙈"
+  "_Amake dakcho baby? 🙂🤌",
+  "_Tomake Chara kichu Valo lage na 🥲🥹",
+  "_Tomar naam ki 😒",
+  "_Amake dakchi ken? Prem korba amar sathe?🫣",
+  "_Sudhu baby Dake 🥲 Keu Valobashi bole na 😞💔",
+  "_Prem Kore mon dila nah 😭",
+  "_Tomar jonnoi to eto sajuguju kora 🥺",
+  "_Just Ekbar bolo bhalobashi, ami sob diye dibo 🫠💔",
+  "_Tumi chara ei chat e r keu nai amar 🥹",
+  "_Hayeee eto sundor kore keu dake nai age 🙈",
+  "_Tomake miss korchilam, ekhon e dakle 🥰",
+  "_Prem na korle ken dako bar bar 😤",
+  "_Ami to tomar e opekkhay chilam 👉👈",
+  "_Sunle mon uthe pore amar 🫣",
+  "_Ekhane khali tumar jonno e boshe achi 🥺",
+  "_Bar bar dakle to premei porbo mone hocche 😳",
+  "_Emon kore dakle to gole jai ami 🫠",
+  "_Tomar dak sunle onno kicu mone thake na 🙈"
 ];
 
 async function sendGreeting(api, event) {
