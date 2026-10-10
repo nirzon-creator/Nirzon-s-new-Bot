@@ -20,10 +20,10 @@ module.exports = {
     const { threadID, messageID } = event;
 
     const songLinks = [
-      "https://files.catbox.moe/etsdn9.mp3",
-      "https://files.catbox.moe/ayepdz.mp3",
-      "https://files.catbox.moe/oaecnx.mp3",
-      "https://files.catbox.moe/xtpf61.mp3",
+      "https://files.catbox.moe/u0ctfd.mp3",
+      "https://files.catbox.moe/c6b9rr.mp3",
+      "https://files.catbox.moe/l5e9qv.mp3",
+      "https://files.catbox.moe/yo9wvh.mp3",
       "https://files.catbox.moe/12grz0.mp3",
       "https://files.catbox.moe/aaqddo.mp3",
       "https://files.catbox.moe/k3acvx.mp3",
