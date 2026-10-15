@@ -19,7 +19,7 @@ async function getTemplate() {
 module.exports = {
   config: {
     name: "amarbondhu",
-    aliases: ["12vatari"],
+    aliases: ["12 vatari"],
     version: "1.4",
     author: "EryXenX",
     countDown: 8,
