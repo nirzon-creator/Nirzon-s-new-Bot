@@ -32,7 +32,6 @@ module.exports = {
 ├─ 🔗 Cᴏɴᴛᴀᴄᴛ ─╮
 │ 📘 Facebook  : fb.com/61561645647195 
 │ 💬 Messenger: m.me/61561645647195 
-│ 📞 WhatsApp  : wa.me/01329955691
 ╰────────────────╯`;
 
     const cacheDir = path.join(__dirname, "cache");
