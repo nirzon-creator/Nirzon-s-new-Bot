@@ -15,7 +15,7 @@
   "nickNameBot": "Ӈɪɴᴀᴛᴀ's 💜",
   "prefix": "-",
   "enableTypingIndicator": true,
-  "typingDuration": 2000,
+  "typingDuration": 2400,
   "notesTypingIndicator": "true = show 'is typing...' before every reply (more human-like, adds visible delay) | false = reply instantly, no typing shown",
   "noPrefix": {
     "enable": true,
@@ -30,7 +30,8 @@
     "ignoreCommand": []
   },
   "adminBot": [
-    "61561645647195"
+    "61561645647195",
+    "61595173777459"
   ],
   "reactUnsend": {
     "enable": true,
