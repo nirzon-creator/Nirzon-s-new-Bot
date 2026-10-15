@@ -37,7 +37,7 @@ module.exports.config = {
   name: "baby",
   version: "8.0.0",
   role: 0,
-  author: "EryXenX",
+  author: "NirZon",
   countTime: 0,
   category: "chat",
   shortDescription: "AI auto teach chat (Simsimi-style)",
@@ -202,7 +202,7 @@ module.exports.onReply = async function ({ api, event, Reply, usersData }) {
     if (type === "photo") reaction = "🫩";
     else if (type === "animated_image") reaction = "😵‍💫";
     else if (type === "video") reaction = "🤔";
-    else if (type === "audio") reaction = "🤕";
+    else if (type === "audio") reaction = "😫";
 
     if (reaction) {
       try {
@@ -267,7 +267,7 @@ const greetingReplies = [
   "_Amake dakcho baby? 🙂🤌",
   "_Tomake Chara kichu Valo lage na 🥲🥹",
   "_Tomar naam ki 😒",
-  "_Amake dakchi ken? Prem korba amar sathe?🫣",
+  "_Amake dakcho ken? Prem korba amar sathe?🫣",
   "_Sudhu baby Dake 🥲 Keu Valobashi bole na 😞💔",
   "_Prem Kore mon dila nah 😭",
   "_Tomar jonnoi to eto sajuguju kora 🥺",
@@ -386,7 +386,7 @@ module.exports.onChat = async function ({ api, event, usersData }) {
   const text = event.body?.toLowerCase().trim();
 
   const senderName = await getUserName(api, event.senderID, usersData);
-  const triggers = ["baby", "bot", "bby", "beby", "bbz", "xan", "jan", "janu", "xanu", "বেবি", "জান", "বট", "জানু"];
+  const triggers = ["baby", "bot", "bby", "beby", "bbz", "xan", "jan", "jaan", "jaanu", "janu", "xanu", "বেবি", "জান", "বট", "জানু"];
   const uid = getBotUID(api);
 
   if (isBotMentioned(event, uid)) {
