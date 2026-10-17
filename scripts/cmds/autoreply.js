@@ -1,60 +1,159 @@
 const fs = require("fs");
 const path = require("path");
+const axios = require("axios");
 
 const DATA_FILE = path.join(__dirname, "autoreply_data.json");
 
+// ==================== DEFAULT REPLIES ====================
+
 const DEFAULT_REPLIES = {
-  "miss you": ["অরেক বেডারে Miss না করে jan মেয়ে হলে বস রে হাঙ্গা করো😶👻😘"],
-  "miss u too": ["হুম আমি ও তোমাকে Miss করি... কিন্তু নির্জন বস বেশি মিস করে আমাকে😏💖"],
-  "kiss de": ["কিস দিস না তোর মুখে দূর গন্ধ কয়দিন ধরে দাঁত ব্রাশ করিস নাই🤬"],
-  "hi": ["এত হাই-হ্যালো কর ক্যান প্রিও..!😜🫵"],
-  "bc": ["SAME TO YOU😊"],
-  "pro": ["Khud k0o KYa LeGend SmJhTi Hai 😂"],
-  "good morning": ["GOOD MORNING দাত ব্রাশ করে খেয়ে নেও😚"],
-  "good night": ["Sweet Dream babu… তবে আগে বস কে GN বলে নিও 😏💤"],
-  "tor bal": ["~ এখনো বাল উঠে নাই নাকি তোমার?? 🤖"],
-  "nirzon": ["উনি এখন কাজে বিজি আছে কি বলবেন আমাকে বলতে পারেন..!😘"],
-  "owner": ["‎[𝐎𝐖𝐍𝐄𝐑:☞ NirZon ☜\nFacebook: https://www.facebook.com/profile.php?id=61561645647195"],
-  "admin": ["He is NirZon Islam তাকে সবাই Admin NirZon হিসেবে চিনে😘☺️"],
-  "vabi": ["এ তো হাছিনা হে মেরে দিলকি দারকান হে মেরি জান হে😍."],
-  "chup": ["তুই চুপ চুপ কর পাগল ছাগল"],
-  "assalamualaikum": ["Walaikumassalam✨❤️‍🩹"],
-  "kiss me": ["তুমি পঁচা তোমাকে কিস দিবো না 🤭 \nআমি শুধু বস কে দিবো 😘"],
-  "thanks": ["এতো ধন্যবাদ না দিয়ে আমার বস রে তোর গার্লফ্রেন্ড টা দিয়ে দে..!🐸"],
-  "i love you": ["মেয়ে হলে আমার বস এর ইনবক্সে এখুনি গুঁতা দিন🫢😻"],
-  "love you": ["ভালোবাসা নামক আবলামী করতে চাইলে Boss এর ইনবক্সে গুতা দিন 😘"],
-  "by": ["কিরে তুই কই যাস কোন মেয়ের সাথে চিপায় যাবি..!🌚🌶️"],
-  "bye": ["তুই যদি জাস তরে গ্রুপ থেকে লাত্থি মেরে বের করবো 😤"],
-  "ami nirzon": ["হ্যা বস কেমন আছেন..? অনেক মিস করি আপনাকে..🥺"],
-  "bot er baccha": ["আমার বাচ্চা তো তোমার গার্লফ্রেন্ডের পেটে..!!🌚⛏️"],
-  "tor nam ki": ["MY NAME IS ─꯭─⃝‌‌Ḣιиαтα💖"],
-  "pic de": ["এন থেকে সর দুরে গিয়া মর..😒🔪"],
-  "cudi": ["এত দোচা দুচি করস কেনো..!🥱🌝🌚"],
-  "heda": ["এতো রাগ শরীরের জন্য ভালো না 🥰"],
-  "lol": ["ভাই তুই এত হাসিস না..!🌚🤣"],
-  "kire ki koros": ["তোমার কথা ভাবতেছি জানু 😚"],
-  "ki koros": ["বস নির্জন এর সাথে মিটিংয়ে ব্যস্ত আছি 😏💘"],
-  "kire bot": ["হ্যাঁ, বস কেমন আছেন আপনার ওই খানে উম্মাহ 😘😽🙈"],
-  "valo acho": ["হ্যাঁ রে প্রিও, বস এর দোয়ায় ভালো আছি 😌💞"],
-  "pagol": ["হুম পাগল, কিন্তু তোমারই পাগল 😏😂"],
-  "breakup": ["চিন্তা করিস না… বস তো আছেই তোকে নতুন জন দিয়া দিবে 😎🔥"],
-  "tui ke": ["আমি তোর বস নির্জন এর ChatBot 😏"],
-  "umm": ["এতো Umm কেনো জানু… কিছু বলবা? 😉"],
-  "hmm": ["Hmmm কিসের হুমম জানু 🥵"],
-  "lovely": ["Love করলে সরাসরি বস কে বল জানু 😻🔥"]
+  "miss you": [
+    "অরেক বেডারে Miss না করে jan মেয়ে হলে বস রে হাঙ্গা করো😶👻😘"
+  ],
+  "miss u too": [
+    "হুম আমি ও তোমাকে Miss করি... কিন্তু নির্জন বস বেশি মিস করে আমাকে😏💖"
+  ],
+  "kiss de": [
+    "কিস দিস না তোর মুখে দূর গন্ধ কয়দিন ধরে দাঁত ব্রাশ করিস নাই🤬"
+  ],
+  "hi": [
+    "এত হাই-হ্যালো কর ক্যান প্রিও..!😜🫵"
+  ],
+  "bc": [
+    "SAME TO YOU😊"
+  ],
+  "pro": [
+    "Khud k0o KYa LeGend SmJhTi Hai 😂"
+  ],
+  "good morning": [
+    "GOOD MORNING দাত ব্রাশ করে খেয়ে নেও😚"
+  ],
+  "good night": [
+    "Sweet Dream babu… তবে আগে বস কে GN বলে নিও 😏💤"
+  ],
+  "tor bal": [
+    "~ এখনো বাল উঠে নাই নাকি তোমার?? 🤖"
+  ],
+  "nirzon": [
+    "উনি এখন কাজে বিজি আছে কি বলবেন আমাকে বলতে পারেন..!😘"
+  ],
+  "owner": [
+    "𝐎𝐖𝐍𝐄𝐑: ☞ NirZon ☜\nFacebook: https://www.facebook.com/profile.php?id=61561645647195"
+  ],
+  "admin": [
+    "He is NirZon Islam তাকে সবাই Admin NirZon হিসেবে চিনে😘☺️"
+  ],
+  "vabi": [
+    "এ তো হাছিনা হে মেরে দিলকি দারকান হে মেরি জান হে😍."
+  ],
+  "chup": [
+    "তুই চুপ চুপ কর পাগল ছাগল"
+  ],
+  "assalamualaikum": [
+    "Walaikumassalam✨❤️‍🩹"
+  ],
+  "kiss me": [
+    "তুমি পঁচা তোমাকে কিস দিবো না 🤭\nআমি শুধু বস কে দিবো 😘"
+  ],
+  "thanks": [
+    "এতো ধন্যবাদ না দিয়ে আমার বস রে তোর গার্লফ্রেন্ড টা দিয়ে দে..!🐸"
+  ],
+  "i love you": [
+    "মেয়ে হলে আমার বস এর ইনবক্সে এখুনি গুঁতা দিন🫢😻"
+  ],
+  "love you": [
+    "ভালোবাসা নামক আবলামী করতে চাইলে Boss এর ইনবক্সে গুতা দিন 😘"
+  ],
+  "by": [
+    "কিরে তুই কই যাস কোন মেয়ের সাথে চিপায় যাবি..!🌚🌶️"
+  ],
+  "bye": [
+    "তুই যদি জাস তরে গ্রুপ থেকে লাত্থি মেরে বের করবো 😤"
+  ],
+  "ami nirzon": [
+    "হ্যা বস কেমন আছেন..? অনেক মিস করি আপনাকে..🥺"
+  ],
+  "bot er baccha": [
+    "আমার বাচ্চা তো তোমার গার্লফ্রেন্ডের পেটে..!!🌚⛏️"
+  ],
+  "tor nam ki": [
+    "MY NAME IS ─꯭─⃝‌‌Ḣιиαтα💖"
+  ],
+  "pic de": [
+    "এন থেকে সর দুরে গিয়া মর..😒🔪"
+  ],
+  "cudi": [
+    "এত দোচা দুচি করস কেনো..!🥱🌝🌚"
+  ],
+  "heda": [
+    "এতো রাগ শরীরের জন্য ভালো না 🥰"
+  ],
+  "lol": [
+    "ভাই তুই এত হাসিস না..!🌚🤣"
+  ],
+  "kire ki koros": [
+    "তোমার কথা ভাবতেছি জানু 😚"
+  ],
+  "ki koros": [
+    "বস নির্জন এর সাথে মিটিংয়ে ব্যস্ত আছি 😏💘"
+  ],
+  "kire bot": [
+    "হ্যাঁ, বস কেমন আছেন আপনার ওই খানে উম্মাহ 😘😽🙈"
+  ],
+  "valo acho": [
+    "হ্যাঁ রে প্রিও, বস এর দোয়ায় ভালো আছি 😌💞"
+  ],
+  "pagol": [
+    "হুম পাগল, কিন্তু তোমারই পাগল 😏😂"
+  ],
+  "breakup": [
+    "চিন্তা করিস না… বস তো আছেই তোকে নতুন জন দিয়া দিবে 😎🔥"
+  ],
+  "tui ke": [
+    "আমি তোর বস নির্জন এর ChatBot 😏"
+  ],
+  "umm": [
+    "এতো Umm কেনো জানু… কিছু বলবা? 😉"
+  ],
+  "hmm": [
+    "Hmmm কিসের হুমম জানু 🥵"
+  ],
+  "lovely": [
+    "Love করলে সরাসরি বস কে বল জানু 😻🔥"
+  ]
 };
 
+// ==================== DATA FUNCTIONS ====================
+
 function normalize(text) {
-  return String(text || "").trim().toLowerCase().replace(/\s+/g, " ");
+  return String(text || "")
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, " ");
+}
+
+function writeData(data) {
+  const tempFile = DATA_FILE + ".tmp";
+
+  fs.writeFileSync(
+    tempFile,
+    JSON.stringify(data, null, 2),
+    "utf8"
+  );
+
+  fs.renameSync(tempFile, DATA_FILE);
 }
 
 function readData() {
   try {
     if (!fs.existsSync(DATA_FILE)) {
-      writeData({
+      const initialData = {
         enabled: true,
         replies: DEFAULT_REPLIES
-      });
+      };
+
+      writeData(initialData);
+      return initialData;
     }
 
     const data = JSON.parse(
@@ -71,7 +170,7 @@ function readData() {
 
     return data;
   } catch (error) {
-    console.error("[autoreply] Data error:", error.message);
+    console.error("[AutoReply] Data error:", error.message);
 
     return {
       enabled: true,
@@ -80,20 +179,10 @@ function readData() {
   }
 }
 
-function writeData(data) {
-  const tempFile = `${DATA_FILE}.tmp`;
-
-  fs.writeFileSync(
-    tempFile,
-    JSON.stringify(data, null, 2),
-    "utf8"
-  );
-
-  fs.renameSync(tempFile, DATA_FILE);
-}
+// ==================== USAGE MENU ====================
 
 function sendUsage(api, event, callback) {
-  const usage = `╭───「 AUTO REPLY 」───╮
+  const usage = `╭────「 AUTO REPLY 」────╮
 
 এই মেসেজে Reply করে লিখুন:
 
@@ -105,6 +194,7 @@ list
 test trigger
 
 উদাহরণ:
+
 add hello | Hello babu 😘
 del hello
 
@@ -121,22 +211,78 @@ del hello
   );
 }
 
+// ==================== BABY CHAT FALLBACK ====================
+
+async function getBabyChatReply(input, event) {
+  try {
+    let senderName = "User";
+
+    try {
+      if (global.usersData?.getName) {
+        senderName = await global.usersData.getName(
+          event.senderID
+        );
+      }
+    } catch (_) {}
+
+    /*
+      Baby Chat API fallback.
+      Endpoint এবং response format তোমার baby.js-এর
+      আসল API-এর সঙ্গে মিলতে হবে।
+    */
+
+    const response = await axios.get(
+      "https://eryxenx.agi.bd/api/simsimi/",
+      {
+        params: {
+          text: input,
+          senderName,
+          threadID: event.threadID,
+          senderID: event.senderID
+        },
+        timeout: 20000
+      }
+    );
+
+    const data = response.data;
+
+    if (typeof data === "string") {
+      return data.trim() || null;
+    }
+
+    return (
+      data?.response ||
+      data?.reply ||
+      data?.message ||
+      null
+    );
+  } catch (error) {
+    console.error(
+      "[AutoReply/BabyChat]",
+      error.response?.data || error.message
+    );
+
+    return null;
+  }
+}
+
+// ==================== COMMAND CONFIG ====================
+
 module.exports.config = {
   name: "autoreply",
-  version: "2.0.0",
+  version: "3.0.0",
   author: "NirZon",
   role: 2,
   countDown: 2,
   category: "chat",
   shortDescription: "Group AutoReply Manager",
-  longDescription: "Manage group-only auto replies",
+  longDescription: "Manage group AutoReply with Baby Chat fallback",
   guide: "{pn}"
 };
 
-module.exports.onStart = async function ({
-  api,
-  event
-}) {
+// ==================== COMMAND START ====================
+
+module.exports.onStart = async function ({ api, event }) {
   return sendUsage(api, event, (info) => {
     if (
       !global.GoatBot ||
@@ -145,17 +291,17 @@ module.exports.onStart = async function ({
       return;
     }
 
-    global.GoatBot.onReply.set(
-      info.messageID,
-      {
-        commandName: this.config.name,
-        messageID: info.messageID,
-        author: String(event.senderID),
-        threadID: String(event.threadID)
-      }
-    );
+    global.GoatBot.onReply.set(info.messageID, {
+      commandName: "autoreply",
+      mode: "manager",
+      messageID: info.messageID,
+      author: String(event.senderID),
+      threadID: String(event.threadID)
+    });
   });
 };
+
+// ==================== REPLY HANDLER ====================
 
 module.exports.onReply = async function ({
   api,
@@ -163,6 +309,71 @@ module.exports.onReply = async function ({
   Reply
 }) {
   if (!event || !Reply || !event.body) return;
+
+  const input = String(event.body).trim();
+
+  if (!input) return;
+
+  // --------------------------------
+  // REPLY TO AN AUTOREPLY MESSAGE
+  // --------------------------------
+
+  if (Reply.mode === "autoreply_response") {
+    if (
+      String(event.threadID) !==
+      String(Reply.threadID)
+    ) {
+      return;
+    }
+
+    const data = readData();
+    const trigger = normalize(input);
+    const replies = data.replies[trigger];
+
+    // Trigger exists: use AutoReply
+    if (
+      data.enabled &&
+      Array.isArray(replies) &&
+      replies.length > 0
+    ) {
+      const answer =
+        replies[
+          Math.floor(Math.random() * replies.length)
+        ];
+
+      return api.sendMessage(
+        answer,
+        event.threadID,
+        event.messageID
+      );
+    }
+
+    // Trigger missing: use Baby Chat fallback
+    const babyReply = await getBabyChatReply(
+      input,
+      event
+    );
+
+    if (babyReply) {
+      return api.sendMessage(
+        babyReply,
+        event.threadID,
+        event.messageID
+      );
+    }
+
+    return api.sendMessage(
+      "😿 Baby Chat থেকে উত্তর পাওয়া যায়নি। API check করো।",
+      event.threadID,
+      event.messageID
+    );
+  }
+
+  // --------------------------------
+  // USAGE MENU MANAGEMENT
+  // --------------------------------
+
+  if (Reply.mode !== "manager") return;
 
   if (
     String(event.threadID) !==
@@ -176,13 +387,12 @@ module.exports.onReply = async function ({
     String(Reply.author)
   ) {
     return api.sendMessage(
-      "এই Usage মেসেজের যিনি command দিয়েছেন, শুধু তিনিই ব্যবহার করতে পারবেন।",
+      "⚠️ এই Usage মেসেজের যিনি command দিয়েছেন, শুধু তিনিই এটি পরিচালনা করতে পারবেন।",
       event.threadID,
       event.messageID
     );
   }
 
-  const input = String(event.body).trim();
   const action = normalize(input);
   const data = readData();
 
@@ -192,7 +402,7 @@ module.exports.onReply = async function ({
     writeData(data);
 
     return api.sendMessage(
-      "✅ AutoReply চালু করা হয়েছে।",
+      "✅ AutoReply চালু হয়েছে।",
       event.threadID,
       event.messageID
     );
@@ -204,7 +414,7 @@ module.exports.onReply = async function ({
     writeData(data);
 
     return api.sendMessage(
-      "⛔ AutoReply বন্ধ করা হয়েছে।",
+      "⛔ AutoReply বন্ধ হয়েছে।",
       event.threadID,
       event.messageID
     );
@@ -229,7 +439,7 @@ module.exports.onReply = async function ({
       .join("\n");
 
     return api.sendMessage(
-      `📋 AutoReply List:\n${list}`,
+      `📋 AutoReply List:\n\n${list}`,
       event.threadID,
       event.messageID
     );
@@ -279,7 +489,7 @@ module.exports.onReply = async function ({
 
     if (!data.replies[trigger]) {
       return api.sendMessage(
-        `❌ "${trigger}" Trigger পাওয়া যায়নি।`,
+        `❌ "${trigger}" Trigger পাওয়া যায়নি।`,
         event.threadID,
         event.messageID
       );
@@ -306,17 +516,19 @@ module.exports.onReply = async function ({
 
     if (!Array.isArray(replies) || !replies.length) {
       return api.sendMessage(
-        `❌ "${trigger}" Trigger পাওয়া যায়নি।`,
+        `❌ "${trigger}" Trigger পাওয়া যায়নি।`,
         event.threadID,
         event.messageID
       );
     }
 
-    const reply =
-      replies[Math.floor(Math.random() * replies.length)];
+    const answer =
+      replies[
+        Math.floor(Math.random() * replies.length)
+      ];
 
     return api.sendMessage(
-      `🧪 Test Reply:\n${reply}`,
+      `🧪 Test Reply:\n${answer}`,
       event.threadID,
       event.messageID
     );
@@ -329,11 +541,12 @@ module.exports.onReply = async function ({
   );
 };
 
+// ==================== GROUP AUTOREPLY ====================
+
 module.exports.onChat = async function ({
   api,
   event
 }) {
-  // Group only
   if (
     !event ||
     !event.isGroup ||
@@ -343,7 +556,6 @@ module.exports.onChat = async function ({
     return;
   }
 
-  // Ignore bot's own messages
   const botID =
     typeof api.getCurrentUserID === "function"
       ? api.getCurrentUserID()
@@ -364,18 +576,46 @@ module.exports.onChat = async function ({
 
   if (!data.enabled) return;
 
-  const replies = data.replies[normalize(body)];
+  const trigger = normalize(body);
+  const replies = data.replies[trigger];
 
+  // Only exact triggers get an automatic reply
   if (!Array.isArray(replies) || !replies.length) {
     return;
   }
 
-  const reply =
-    replies[Math.floor(Math.random() * replies.length)];
+  const answer =
+    replies[
+      Math.floor(Math.random() * replies.length)
+    ];
 
   return api.sendMessage(
-    reply,
+    answer,
     event.threadID,
-    event.messageID
+    (error, info) => {
+      if (error || !info) {
+        console.error(
+          "[AutoReply] Send error:",
+          error
+        );
+        return;
+      }
+
+      // Track this AutoReply message so users can reply to it
+      if (
+        global.GoatBot &&
+        global.GoatBot.onReply
+      ) {
+        global.GoatBot.onReply.set(
+          info.messageID,
+          {
+            commandName: "autoreply",
+            mode: "autoreply_response",
+            messageID: info.messageID,
+            threadID: String(event.threadID)
+          }
+        );
+      }
+    }
   );
 };
