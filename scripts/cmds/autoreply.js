@@ -44,22 +44,25 @@ const DEFAULT_REPLIES = {
   "lovely": ["Love করলে সরাসরি বস কে বল জানু 😻🔥"]
 };
 
-const normalize = text => String(text || "").trim().toLowerCase();
+function normalize(text) {
+  return String(text || "").trim().toLowerCase().replace(/\s+/g, " ");
+}
 
 function readData() {
-  if (!fs.existsSync(DATA_FILE)) {
-    fs.writeFileSync(
-      DATA_FILE,
-      JSON.stringify({ enabled: true, replies: DEFAULT_REPLIES }, null, 2),
-      "utf8"
-    );
-  }
-
   try {
-    const data = JSON.parse(fs.readFileSync(DATA_FILE, "utf8"));
+    if (!fs.existsSync(DATA_FILE)) {
+      writeData({
+        enabled: true,
+        replies: DEFAULT_REPLIES
+      });
+    }
+
+    const data = JSON.parse(
+      fs.readFileSync(DATA_FILE, "utf8")
+    );
 
     if (!data.replies || typeof data.replies !== "object") {
-      data.replies = {};
+      data.replies = DEFAULT_REPLIES;
     }
 
     if (typeof data.enabled !== "boolean") {
@@ -68,64 +71,182 @@ function readData() {
 
     return data;
   } catch (error) {
-    console.error("[autoreply] Data file error:", error.message);
-    return { enabled: true, replies: DEFAULT_REPLIES };
+    console.error("[autoreply] Data error:", error.message);
+
+    return {
+      enabled: true,
+      replies: DEFAULT_REPLIES
+    };
   }
 }
 
 function writeData(data) {
-  const temp = `${DATA_FILE}.tmp`;
+  const tempFile = `${DATA_FILE}.tmp`;
 
-  fs.writeFileSync(temp, JSON.stringify(data, null, 2), "utf8");
-  fs.renameSync(temp, DATA_FILE);
+  fs.writeFileSync(
+    tempFile,
+    JSON.stringify(data, null, 2),
+    "utf8"
+  );
+
+  fs.renameSync(tempFile, DATA_FILE);
+}
+
+function sendUsage(api, event, callback) {
+  const usage = `╭───「 AUTO REPLY 」───╮
+
+এই মেসেজে Reply করে লিখুন:
+
+on
+off
+add trigger | reply
+del trigger
+list
+test trigger
+
+উদাহরণ:
+add hello | Hello babu 😘
+del hello
+
+╰────────────────────╯`;
+
+  return api.sendMessage(
+    usage,
+    event.threadID,
+    (error, info) => {
+      if (!error && info && callback) {
+        callback(info);
+      }
+    }
+  );
 }
 
 module.exports.config = {
   name: "autoreply",
-  version: "1.0.0",
+  version: "2.0.0",
   author: "NirZon",
   role: 2,
-  countTime: 0,
+  countDown: 2,
   category: "chat",
-  shortDescription: "Group-only custom auto replies",
-  longDescription: "Custom keyword replies without external API",
-  guide:
-    "{pn} on | off | add [trigger] | [reply] | remove [trigger] | list | test [trigger]"
+  shortDescription: "Group AutoReply Manager",
+  longDescription: "Manage group-only auto replies",
+  guide: "{pn}"
 };
 
-module.exports.onStart = async function ({ api, event, args }) {
-  const action = normalize(args[0]);
-  const rest = args.slice(1).join(" ").trim();
-  const data = readData();
+module.exports.onStart = async function ({
+  api,
+  event
+}) {
+  return sendUsage(api, event, (info) => {
+    if (
+      !global.GoatBot ||
+      !global.GoatBot.onReply
+    ) {
+      return;
+    }
 
-  if (action === "on" || action === "off") {
-    data.enabled = action === "on";
-    writeData(data);
+    global.GoatBot.onReply.set(
+      info.messageID,
+      {
+        commandName: this.config.name,
+        messageID: info.messageID,
+        author: String(event.senderID),
+        threadID: String(event.threadID)
+      }
+    );
+  });
+};
 
+module.exports.onReply = async function ({
+  api,
+  event,
+  Reply
+}) {
+  if (!event || !Reply || !event.body) return;
+
+  if (
+    String(event.threadID) !==
+    String(Reply.threadID)
+  ) {
+    return;
+  }
+
+  if (
+    String(event.senderID) !==
+    String(Reply.author)
+  ) {
     return api.sendMessage(
-      `✅ Group auto-reply is ${data.enabled ? "ON" : "OFF"}.`,
+      "এই Usage মেসেজের যিনি command দিয়েছেন, শুধু তিনিই ব্যবহার করতে পারবেন।",
       event.threadID,
       event.messageID
     );
   }
 
-  if (action === "add") {
-    const divider = rest.indexOf("|");
+  const input = String(event.body).trim();
+  const action = normalize(input);
+  const data = readData();
 
-    if (divider < 0) {
+  // ON
+  if (action === "on") {
+    data.enabled = true;
+    writeData(data);
+
+    return api.sendMessage(
+      "✅ AutoReply চালু করা হয়েছে।",
+      event.threadID,
+      event.messageID
+    );
+  }
+
+  // OFF
+  if (action === "off") {
+    data.enabled = false;
+    writeData(data);
+
+    return api.sendMessage(
+      "⛔ AutoReply বন্ধ করা হয়েছে।",
+      event.threadID,
+      event.messageID
+    );
+  }
+
+  // LIST
+  if (action === "list") {
+    const triggers = Object.keys(data.replies);
+
+    if (!triggers.length) {
       return api.sendMessage(
-        "ব্যবহার: /autoreply add hi | Hello jaan! 💗",
+        "📭 কোনো AutoReply নেই।",
         event.threadID,
         event.messageID
       );
     }
 
-    const trigger = normalize(rest.slice(0, divider));
-    const reply = rest.slice(divider + 1).trim();
+    const list = triggers
+      .map((trigger, index) =>
+        `${index + 1}. ${trigger}`
+      )
+      .join("\n");
+
+    return api.sendMessage(
+      `📋 AutoReply List:\n${list}`,
+      event.threadID,
+      event.messageID
+    );
+  }
+
+  // ADD
+  const addMatch = input.match(
+    /^add\s+(.+?)\s*\|\s*([\s\S]+)$/i
+  );
+
+  if (addMatch) {
+    const trigger = normalize(addMatch[1]);
+    const reply = addMatch[2].trim();
 
     if (!trigger || !reply) {
       return api.sendMessage(
-        "❌ Trigger ও reply দুটোই দিতে হবে।",
+        "❌ Trigger এবং Reply দুটোই দিতে হবে।",
         event.threadID,
         event.messageID
       );
@@ -142,26 +263,23 @@ module.exports.onStart = async function ({ api, event, args }) {
     writeData(data);
 
     return api.sendMessage(
-      `✅ Reply saved!\nTrigger: ${trigger}\nReply: ${reply}`,
+      `✅ AutoReply Added!\n\nTrigger: ${trigger}\nReply: ${reply}`,
       event.threadID,
       event.messageID
     );
   }
 
-  if (action === "remove" || action === "rm") {
-    const trigger = normalize(rest);
+  // DELETE
+  const deleteMatch = input.match(
+    /^(?:del|delete|remove|rm)\s+([\s\S]+)$/i
+  );
 
-    if (!trigger) {
-      return api.sendMessage(
-        "ব্যবহার: /autoreply remove hi",
-        event.threadID,
-        event.messageID
-      );
-    }
+  if (deleteMatch) {
+    const trigger = normalize(deleteMatch[1]);
 
     if (!data.replies[trigger]) {
       return api.sendMessage(
-        "❌ এই trigger পাওয়া যায়নি।",
+        `❌ "${trigger}" Trigger পাওয়া যায়নি।`,
         event.threadID,
         event.messageID
       );
@@ -171,103 +289,93 @@ module.exports.onStart = async function ({ api, event, args }) {
     writeData(data);
 
     return api.sendMessage(
-      `🗑️ Removed: ${trigger}`,
+      `🗑️ Deleted: ${trigger}`,
       event.threadID,
       event.messageID
     );
   }
 
-  if (action === "list") {
-    const entries = Object.entries(data.replies);
+  // TEST
+  const testMatch = input.match(
+    /^test\s+([\s\S]+)$/i
+  );
 
-    if (!entries.length) {
-      return api.sendMessage(
-        "📭 কোনো custom reply নেই।",
-        event.threadID,
-        event.messageID
-      );
-    }
-
-    const lines = entries.slice(0, 40).map(
-      ([key, value]) =>
-        `• ${key} (${Array.isArray(value) ? value.length : 1})`
-    );
-
-    const more =
-      entries.length > 40
-        ? `\n…আর ${entries.length - 40}টি trigger আছে।`
-        : "";
-
-    return api.sendMessage(
-      `📋 Triggers (${entries.length}):\n${lines.join("\n")}${more}`,
-      event.threadID,
-      event.messageID
-    );
-  }
-
-  if (action === "test") {
-    const trigger = normalize(rest);
+  if (testMatch) {
+    const trigger = normalize(testMatch[1]);
     const replies = data.replies[trigger];
 
     if (!Array.isArray(replies) || !replies.length) {
       return api.sendMessage(
-        "❌ এই trigger-এর reply নেই।",
+        `❌ "${trigger}" Trigger পাওয়া যায়নি।`,
         event.threadID,
         event.messageID
       );
     }
 
-    const reply = replies[Math.floor(Math.random() * replies.length)];
+    const reply =
+      replies[Math.floor(Math.random() * replies.length)];
 
-    return api.sendMessage(reply, event.threadID, event.messageID);
+    return api.sendMessage(
+      `🧪 Test Reply:\n${reply}`,
+      event.threadID,
+      event.messageID
+    );
   }
 
   return api.sendMessage(
-    "🤖 Auto Reply:\n" +
-      "/autoreply on\n" +
-      "/autoreply off\n" +
-      "/autoreply add hi | Hello jaan! 💗\n" +
-      "/autoreply remove hi\n" +
-      "/autoreply list\n" +
-      "/autoreply test hi",
+    "❌ Command বুঝিনি। Usage মেসেজে Reply করে on/off, add trigger | reply, del trigger, list অথবা test trigger লিখুন।",
     event.threadID,
     event.messageID
   );
 };
 
-module.exports.onChat = async function ({ api, event }) {
-  if (!event || !event.isGroup || !event.threadID || !event.senderID) {
+module.exports.onChat = async function ({
+  api,
+  event
+}) {
+  // Group only
+  if (
+    !event ||
+    !event.isGroup ||
+    !event.threadID ||
+    !event.senderID
+  ) {
     return;
   }
 
+  // Ignore bot's own messages
   const botID =
     typeof api.getCurrentUserID === "function"
       ? api.getCurrentUserID()
       : null;
 
-  if (botID && String(event.senderID) === String(botID)) {
+  if (
+    botID &&
+    String(event.senderID) === String(botID)
+  ) {
     return;
   }
 
   const body = String(event.body || "").trim();
 
-  if (!body || body.startsWith("/")) {
-    return;
-  }
+  if (!body) return;
 
   const data = readData();
 
-  if (!data.enabled) {
-    return;
-  }
+  if (!data.enabled) return;
 
   const replies = data.replies[normalize(body)];
 
-  if (!Array.isArray(replies) || replies.length === 0) {
+  if (!Array.isArray(replies) || !replies.length) {
     return;
   }
 
-  const reply = replies[Math.floor(Math.random() * replies.length)];
+  const reply =
+    replies[Math.floor(Math.random() * replies.length)];
 
-  return api.sendMessage(reply, event.threadID, event.messageID);
+  return api.sendMessage(
+    reply,
+    event.threadID,
+    event.messageID
+  );
 };
