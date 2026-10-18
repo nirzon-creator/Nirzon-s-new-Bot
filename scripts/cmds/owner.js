@@ -30,8 +30,8 @@ module.exports = {
 │ 💼 Pʀᴏғᴇssɪᴏɴ : 𝐄𝐝𝐢𝐭𝐢𝐧𝐠
 │ 🏡 Lᴏᴄᴀᴛɪᴏɴ : Sᴀʀɪsʜᴀʙᴀʀɪ - Pɪɴɢɴᴀ
 ├─ 🔗 Cᴏɴᴛᴀᴄᴛ ─╮
-│ 📘 Facebook  : fb.com/61561645647195 
-│ 💬 Messenger: m.me/61561645647195 
+│ 📘 Facebook  : https://fb.com/61561645647195 
+│ 💬 Messenger: https://m.me/61561645647195 
 ╰────────────────╯`;
 
     const cacheDir = path.join(__dirname, "cache");
@@ -39,7 +39,7 @@ module.exports = {
 
     if (!fs.existsSync(cacheDir)) fs.mkdirSync(cacheDir);
 
-    const imgLink = "https://i.imgur.com/CnNrXj6.jpeg";
+    const imgLink = "https://i.imgur.com/awrrOff.jpeg";
 
     const send = () => {
       api.sendMessage(
