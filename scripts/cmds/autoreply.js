@@ -19,12 +19,8 @@ const DEFAULT_REPLIES = {
   "hi": [
     "এত হাই-হ্যালো কর ক্যান প্রিও..!😜🫵"
   ],
-  "bc": [
-    "SAME TO YOU😊"
-  ],
-  "pro": [
-    "Khud k0o KYa LeGend SmJhTi Hai 😂"
-  ],
+  "bc": ["SAME TO YOU😊"],
+  "pro": ["Khud k0o KYa LeGend SmJhTi Hai 😂"],
   "good morning": [
     "GOOD MORNING দাত ব্রাশ করে খেয়ে নেও😚"
   ],
@@ -46,12 +42,8 @@ const DEFAULT_REPLIES = {
   "vabi": [
     "এ তো হাছিনা হে মেরে দিলকি দারকান হে মেরি জান হে😍."
   ],
-  "chup": [
-    "তুই চুপ চুপ কর পাগল ছাগল"
-  ],
-  "assalamualaikum": [
-    "Walaikumassalam✨❤️‍🩹"
-  ],
+  "chup": ["তুই চুপ চুপ কর পাগল ছাগল"],
+  "assalamualaikum": ["Walaikumassalam✨❤️‍🩹"],
   "kiss me": [
     "তুমি পঁচা তোমাকে কিস দিবো না 🤭\nআমি শুধু বস কে দিবো 😘"
   ],
@@ -79,21 +71,11 @@ const DEFAULT_REPLIES = {
   "tor nam ki": [
     "MY NAME IS ─꯭─⃝‌‌Ḣιиαтα💖"
   ],
-  "pic de": [
-    "এন থেকে সর দুরে গিয়া মর..😒🔪"
-  ],
-  "cudi": [
-    "এত দোচা দুচি করস কেনো..!🥱🌝🌚"
-  ],
-  "heda": [
-    "এতো রাগ শরীরের জন্য ভালো না 🥰"
-  ],
-  "lol": [
-    "ভাই তুই এত হাসিস না..!🌚🤣"
-  ],
-  "kire ki koros": [
-    "তোমার কথা ভাবতেছি জানু 😚"
-  ],
+  "pic de": ["এন থেকে সর দুরে গিয়া মর..😒🔪"],
+  "cudi": ["এত দোচা দুচি করস কেনো..!🥱🌝🌚"],
+  "heda": ["এতো রাগ শরীরের জন্য ভালো না 🥰"],
+  "lol": ["ভাই তুই এত হাসিস না..!🌚🤣"],
+  "kire ki koros": ["তোমার কথা ভাবতেছি জানু 😚"],
   "ki koros": [
     "বস নির্জন এর সাথে মিটিংয়ে ব্যস্ত আছি 😏💘"
   ],
@@ -103,24 +85,14 @@ const DEFAULT_REPLIES = {
   "valo acho": [
     "হ্যাঁ রে প্রিও, বস এর দোয়ায় ভালো আছি 😌💞"
   ],
-  "pagol": [
-    "হুম পাগল, কিন্তু তোমারই পাগল 😏😂"
-  ],
+  "pagol": ["হুম পাগল, কিন্তু তোমারই পাগল 😏😂"],
   "breakup": [
     "চিন্তা করিস না… বস তো আছেই তোকে নতুন জন দিয়া দিবে 😎🔥"
   ],
-  "tui ke": [
-    "আমি তোর বস নির্জন এর ChatBot 😏"
-  ],
-  "umm": [
-    "এতো Umm কেনো জানু… কিছু বলবা? 😉"
-  ],
-  "hmm": [
-    "Hmmm কিসের হুমম জানু 🥵"
-  ],
-  "lovely": [
-    "Love করলে সরাসরি বস কে বল জানু 😻🔥"
-  ]
+  "tui ke": ["আমি তোর বস নির্জন এর ChatBot 😏"],
+  "umm": ["এতো Umm কেনো জানু… কিছু বলবা? 😉"],
+  "hmm": ["Hmmm কিসের হুমম জানু 🥵"],
+  "lovely": ["Love করলে সরাসরি বস কে বল জানু 😻🔥"]
 };
 
 // ==================== DATA FUNCTIONS ====================
@@ -149,7 +121,7 @@ function readData() {
     if (!fs.existsSync(DATA_FILE)) {
       const initialData = {
         enabled: true,
-        replies: DEFAULT_REPLIES
+        replies: { ...DEFAULT_REPLIES }
       };
 
       writeData(initialData);
@@ -161,7 +133,7 @@ function readData() {
     );
 
     if (!data.replies || typeof data.replies !== "object") {
-      data.replies = DEFAULT_REPLIES;
+      data.replies = { ...DEFAULT_REPLIES };
     }
 
     if (typeof data.enabled !== "boolean") {
@@ -174,9 +146,28 @@ function readData() {
 
     return {
       enabled: true,
-      replies: DEFAULT_REPLIES
+      replies: { ...DEFAULT_REPLIES }
     };
   }
+}
+// ==================== ADMIN CHECK ====================
+
+function getBotAdmins() {
+  const admins = global.GoatBot?.config?.adminBot;
+
+  if (Array.isArray(admins)) {
+    return admins.map(String);
+  }
+
+  if (admins === undefined || admins === null) {
+    return [];
+  }
+
+  return [String(admins)];
+}
+
+function isBotAdmin(senderID) {
+  return getBotAdmins().includes(String(senderID));
 }
 
 // ==================== USAGE MENU ====================
@@ -194,7 +185,6 @@ list
 test trigger
 
 উদাহরণ:
-
 add hello | Hello babu 😘
 del hello
 
@@ -210,7 +200,6 @@ del hello
     }
   );
 }
-
 // ==================== BABY CHAT FALLBACK ====================
 
 async function getBabyChatReply(input, event) {
@@ -224,12 +213,6 @@ async function getBabyChatReply(input, event) {
         );
       }
     } catch (_) {}
-
-    /*
-      Baby Chat API fallback.
-      Endpoint এবং response format তোমার baby.js-এর
-      আসল API-এর সঙ্গে মিলতে হবে।
-    */
 
     const response = await axios.get(
       "https://eryxenx.agi.bd/api/simsimi/",
@@ -265,31 +248,18 @@ async function getBabyChatReply(input, event) {
     return null;
   }
 }
-
-// ==================== COMMAND CONFIG ====================
-
-module.exports.config = {
-  name: "autoreply",
-  version: "3.0.0",
-  author: "NirZon",
-  role: 2,
-  countDown: 2,
-  category: "chat",
-  shortDescription: "Group AutoReply Manager",
-  longDescription: "Manage group AutoReply with Baby Chat fallback",
-  guide: "{pn}"
-};
-
 // ==================== COMMAND START ====================
 
 module.exports.onStart = async function ({ api, event }) {
+  if (!isBotAdmin(event.senderID)) {
+    return api.sendMessage(
+      "⛔ এই Manager শুধু Bot Admin-দের জন্য!",
+      event.threadID
+    );
+  }
+
   return sendUsage(api, event, (info) => {
-    if (
-      !global.GoatBot ||
-      !global.GoatBot.onReply
-    ) {
-      return;
-    }
+    if (!global.GoatBot?.onReply) return;
 
     global.GoatBot.onReply.set(info.messageID, {
       commandName: "autoreply",
@@ -311,13 +281,9 @@ module.exports.onReply = async function ({
   if (!event || !Reply || !event.body) return;
 
   const input = String(event.body).trim();
-
   if (!input) return;
 
-  // --------------------------------
-  // REPLY TO AN AUTOREPLY MESSAGE
-  // --------------------------------
-
+  // Member replies to an AutoReply message
   if (Reply.mode === "autoreply_response") {
     if (
       String(event.threadID) !==
@@ -330,7 +296,6 @@ module.exports.onReply = async function ({
     const trigger = normalize(input);
     const replies = data.replies[trigger];
 
-    // Trigger exists: use AutoReply
     if (
       data.enabled &&
       Array.isArray(replies) &&
@@ -348,7 +313,6 @@ module.exports.onReply = async function ({
       );
     }
 
-    // Trigger missing: use Baby Chat fallback
     const babyReply = await getBabyChatReply(
       input,
       event
@@ -369,10 +333,7 @@ module.exports.onReply = async function ({
     );
   }
 
-  // --------------------------------
-  // USAGE MENU MANAGEMENT
-  // --------------------------------
-
+  // Manager commands: admin only
   if (Reply.mode !== "manager") return;
 
   if (
@@ -383,11 +344,11 @@ module.exports.onReply = async function ({
   }
 
   if (
-    String(event.senderID) !==
-    String(Reply.author)
+    !isBotAdmin(event.senderID) ||
+    String(event.senderID) !== String(Reply.author)
   ) {
     return api.sendMessage(
-      "⚠️ এই Usage মেসেজের যিনি command দিয়েছেন, শুধু তিনিই এটি পরিচালনা করতে পারবেন।",
+      "⛔ এই Manager শুধু menu-টি খোলা Bot Admin ব্যবহার করতে পারবেন।",
       event.threadID,
       event.messageID
     );
@@ -444,7 +405,19 @@ module.exports.onReply = async function ({
       event.messageID
     );
   }
+// ==================== COMMAND CONFIG ====================
 
+module.exports.config = {
+  name: "autoreply",
+  version: "3.1.0",
+  author: "NirZon",
+  role: 0,
+  countDown: 2,
+  category: "chat",
+  shortDescription: "Group AutoReply Manager",
+  longDescription: "Manage group AutoReply with Baby Chat fallback",
+  guide: "{pn}"
+};
   // ADD
   const addMatch = input.match(
     /^add\s+(.+?)\s*\|\s*([\s\S]+)$/i
@@ -523,9 +496,7 @@ module.exports.onReply = async function ({
     }
 
     const answer =
-      replies[
-        Math.floor(Math.random() * replies.length)
-      ];
+      replies[Math.floor(Math.random() * replies.length)];
 
     return api.sendMessage(
       `🧪 Test Reply:\n${answer}`,
@@ -543,10 +514,7 @@ module.exports.onReply = async function ({
 
 // ==================== GROUP AUTOREPLY ====================
 
-module.exports.onChat = async function ({
-  api,
-  event
-}) {
+module.exports.onChat = async function ({ api, event }) {
   if (
     !event ||
     !event.isGroup ||
@@ -561,60 +529,42 @@ module.exports.onChat = async function ({
       ? api.getCurrentUserID()
       : null;
 
-  if (
-    botID &&
-    String(event.senderID) === String(botID)
-  ) {
+  if (botID && String(event.senderID) === String(botID)) {
     return;
   }
 
   const body = String(event.body || "").trim();
-
   if (!body) return;
 
   const data = readData();
-
   if (!data.enabled) return;
 
   const trigger = normalize(body);
   const replies = data.replies[trigger];
 
-  // Only exact triggers get an automatic reply
   if (!Array.isArray(replies) || !replies.length) {
     return;
   }
 
   const answer =
-    replies[
-      Math.floor(Math.random() * replies.length)
-    ];
+    replies[Math.floor(Math.random() * replies.length)];
 
   return api.sendMessage(
     answer,
     event.threadID,
     (error, info) => {
       if (error || !info) {
-        console.error(
-          "[AutoReply] Send error:",
-          error
-        );
+        console.error("[AutoReply] Send error:", error);
         return;
       }
 
-      // Track this AutoReply message so users can reply to it
-      if (
-        global.GoatBot &&
-        global.GoatBot.onReply
-      ) {
-        global.GoatBot.onReply.set(
-          info.messageID,
-          {
-            commandName: "autoreply",
-            mode: "autoreply_response",
-            messageID: info.messageID,
-            threadID: String(event.threadID)
-          }
-        );
+      if (global.GoatBot?.onReply) {
+        global.GoatBot.onReply.set(info.messageID, {
+          commandName: "autoreply",
+          mode: "autoreply_response",
+          messageID: info.messageID,
+          threadID: String(event.threadID)
+        });
       }
     }
   );
