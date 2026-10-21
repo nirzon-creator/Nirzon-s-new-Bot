@@ -166,7 +166,7 @@ const baseReplies = [
 "_তোর তো বিয়ে হয় নাই বেবি পাইলি কই-🤦🏻", "_পরকিয়া করছোছ নাকি শালা-🥲🤧", "_তোকে ছাড়া বড় মন খারাপ লাগে 💔", "_তোরে খুব মিস করছি জানিস? 🥺",
 "_ডিসটার্ব করিস না 𝗡𝗶𝗿𝗭𝗼𝗻 আদর করতেছে-🌚💋", "_এত ডাকিস না এমন থাপ্পর দিমু পেন্টে মুইতা দিবি-😾👋🏻", "_বেবি ডাকিস না 🍼 খাওয়া-😒👍🏻",
 "_কি ডাকোস কেন টাকা শেষ নাকি-🌚🤌🏻", "_পিনিক ধরেছে যখন আমায় না ডেকে লেবু খান তখন🍋🐸",  "_ভিডিও কল দিব নাকি সোনা 🌚🫦", "_আম্মু ডাক শালা 😾🦶🏻",
-"_বেবি না ডাইকা RiyA কে খুজে দে-🙃🫶🏻", "_ডাকিস না 𝗡𝗶𝗿𝗭𝗼𝗻 এর সাথে মিটিংয়ে আছি 😒🖐🏻", "_বস ডাক বস 😾✌🏻", "_বেবি ডাকিস না পরে কোলে উঠে দুদু খেতে মন চাইবে🌚💋"
+"_বেবি না ডাইকা RiyA কে খুজে দে-🙃🫶🏻", "_ডাকিস না 𝗡𝗶𝗿𝗭𝗼𝗻 এর সাথে মিটিংয়ে আছি 😒🖐🏻", "_বস ডাক বস 😾✌🏻", "_বেবি ডাকিস না পরে কোলে উঠে দুদু খেতে মন চাইবে🌚💋",
 "_Amake dakcho baby? 🙂🤌", "_Tomake Chara kichu Valo lage na 🥲🥹", "_Tomar naam ki 😒", "_Amake dakcho ken? Prem korba amar sathe?🫣",
 "_Sudhu baby Dake 🥲 Keu Valobashi bole na 😞💔", "_Prem Kore mon dila nah 😭", "_Tomar jonnoi to eto sajuguju kora 🥺",
 "_Just Ekbar bolo bhalobashi\nami sob diye dibo 🫠💔", "_Tumi chara ei chat e r keu nai amar 🥹", "_Hayeee eto sundor kore keu dake nai age 🙈",
