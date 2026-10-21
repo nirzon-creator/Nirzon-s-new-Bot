@@ -232,7 +232,7 @@ async function getBabyReply(api, event, query) {
 
 module.exports.config = {
   name: "autoreply",
-  version: "3.2.0",
+  version: "3.3.0",
   author: "NirZon",
   countDown: 1,
   role: 0,
