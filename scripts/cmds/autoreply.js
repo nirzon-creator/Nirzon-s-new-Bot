@@ -41,7 +41,6 @@ const DEFAULT_REPLIES = {
   "good girl": ["জানি জানি, এত তেল দিস না—ভাজি হয়ে যাব..! 😭🍟"],
   "hot": ["ফ্যান চালা, আমারে বলিস ক্যান..! 🥵🪭"],
   "😂": ["হাসতে থাক, একদিন হাসির বিল পাঠামু..! 🤣💸"],
-  "🙂": ["এই হাসির আড়ালে কী ষড়যন্ত্র চলতেছে..? 🌚🔍"],
   "good morning": ["GOOD MORNING দাত ব্রাশ করে খেয়ে নেও😚"],
   "good night": ["Sweet Dream babu… তবে আগে বস কে GN বলে নিও 😏💤"],
   "tor bal": ["~ এখনো বাল উঠে নাই নাকি তোমার?? 🤖"],
@@ -232,7 +231,7 @@ async function getBabyReply(api, event, query) {
 
 module.exports.config = {
   name: "autoreply",
-  version: "3.3.0",
+  version: "3.4.0",
   author: "NirZon",
   countDown: 1,
   role: 0,
