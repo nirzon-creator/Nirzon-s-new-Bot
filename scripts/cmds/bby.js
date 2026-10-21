@@ -32,7 +32,7 @@ return greetings[Math.floor(Math.random() * greetings.length)];
 
 module.exports.config = {
 name: "bby",
-aliases: ["baby", "bby", " Hey", "Kire", "bot"],
+aliases: ["baby", " Hey", "Kire", "bot"],
 version: "2.0.0",
 author: "NirZon",
 countDown: 0,
@@ -158,7 +158,7 @@ return api.sendMessage(`Error: ${err.message}`, event.threadID, event.messageID)
 module.exports.onChat = async ({ api, event, usersData }) => {
 try {
 const body = event.body ? event.body.toLowerCase() : "";
-if (body.startsWith("baby") || body.startsWith("sara") || body.startsWith("mikasa") || body.startsWith("hinata") || body.startsWith("xadika") || body.startsWith("bby") || body.startsWith("bot") || body.startsWith("jan") || body.startsWith("babu") || body.startsWith("alya")) {
+if (body.startsWith("baby") || body.startsWith("riya") || body.startsWith("mikasa") || body.startsWith("hinata") || body.startsWith("xadika") || body.startsWith("bby") || body.startsWith("bot") || body.startsWith("jan") || body.startsWith("babu") || body.startsWith("alya")) {
 const arr = body.replace(/^\S+\s*/, "");
 const uid = event.senderID;
 const senderName = (await usersData.getName(uid)) || "User";
@@ -196,4 +196,3 @@ global.GoatBot.onReply.set(info.messageID, { commandName: this.config.name, type
 console.error("onChat Error:", err);
 }
 };
-
