@@ -1,7 +1,7 @@
 exports.config = {
   name: "fork",
-  version: "1.0.0",
-  author: "EryXenX",
+  version: "2.0.0",
+  author: "NirZon",
   countDown: 0,
   role: 0,
   shortDescription: "Fork Link",
@@ -30,7 +30,7 @@ exports.onChat = async function({event: z, api: y}){
   if(fork){
     y.sendMessage(
 `🔗𝗚𝗶𝘁𝗛𝘂𝗯 𝗙𝗼𝗿𝗸 𝗟𝗶𝗻𝗸:
-https://github.com/EryXenX/GoatBot-Pro.git`,
+https://github.com/nirzon-creator/Nirzon-s-new-Bot.git`,
       t,
       z.messageID
     );
